@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Multiple Plane Movements</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    #map {
+      height: 800px;
+      width: 100%;
+    }
+
+    #airspace-label {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: rgba(255, 0, 0, 0.2);
+      color: black;
+      padding: 5px 5px;
+      border-radius: 8px;
+      font-family: Arial, sans-serif;
+      font-size: 8px; /* Smaller font size */
+      font-weight: bold;
+      pointer-events: none;
+      z-index: 1000;
+    }
+
+    #slider-container {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: white;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      z-index: 1000;
+      font-family: Arial, sans-serif;
+    }
+  </style>
+</head>
+<body>
+
+<div id="map"></div>
+
+<div id="airspace-label">
+  AIR STRIKE BY PAKISTAN ON INDIA - CONFLICT ZONE WARNING
+</div>
+
+<div id="slider-container">
+  <label for="timeSlider">Time:</label>
+  <input type="range" id="timeSlider" min="0" max="180" step="30" value="0" />
+  <span id="sliderValue">05:00</span>
+</div>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+  const map = L.map('map').setView([33.8, 73.6], 9); // Initial view on conflict zone
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
+
+  const airplaneIcon = L.icon({
+    iconUrl: 'air.png',
+    iconSize: [15, 15],
+    iconAnchor: [8, 8],
+    popupAnchor: [0, -16]
+  });
+
+  const cities = [
+    { name: "Muzaffarabad", coord: [34.3935, 73.5145] },
+    { name: "Rawalakot", coord: [33.8550, 73.7640] },
+    { name: "Kotli", coord: [33.5277, 73.9045] },
+    { name: "Poonch", coord: [33.7460, 74.1235] }
+  ];
+
+  for (const city of cities) {
+    L.marker(city.coord, { icon: airplaneIcon })
+      .addTo(map)
+      .bindPopup(`${city.name}`);
+  }
+
+  L.polygon([
+    [34.6, 73.2],
+    [34.4, 74.0],
+    [33.7, 74.5],
+    [33.2, 73.8],
+    [33.5, 73.0]
+  ], {
+    color: '#FF0000',
+    fillColor: '#FF0000',
+    fillOpacity: 0.2,
+    weight: 2
+  }).addTo(map).bindPopup("Azad Kashmir Conflict Zone");
+
+  L.polyline([
+    [32.0833, 72.6833],
+    [33.8550, 73.7640],
+    [34.3935, 73.5145]
+  ], {
+    color: '#0000FF',
+    dashArray: '4,8',
+    weight: 3
+  }).addTo(map).bindPopup("PAF Strike Path");
+
+  // ✈️ Multiple planes with positions at different times
+  const planes = [
+    {
+      name: "Plane 1",
+      positions: {
+        0: [32.0833, 72.6833],
+        30: [32.8, 72.9],
+        60: [33.3, 73.3],
+        90: [33.7, 73.7],
+        120: [34.0, 73.9],
+        150: [34.3, 73.6],
+        180: [34.3935, 73.5145]
+      }
+    },
+    {
+      name: "Plane 2",
+      positions: {
+        0: [32.1, 72.7],
+        30: [32.9, 73.0],
+        60: [33.4, 73.4],
+        90: [33.8, 73.8],
+        120: [34.1, 74.0],
+        150: [34.4, 73.7],
+        180: [34.5, 73.6]
+      }
+    },
+    {
+      name: "Plane 3",
+      positions: {
+        0: [32.2, 72.6],
+        30: [32.85, 72.95],
+        60: [33.5, 73.2],
+        90: [33.75, 73.65],
+        120: [34.05, 73.8],
+        150: [34.2, 73.7],
+        180: [34.3, 73.5]
+      }
+    }
+  ];
+
+  let planeMarkers = [];
+
+  function formatTime(minutes) {
+    const hrs = 5 + Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    return `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
+  }
+
+  function updatePlanes(time) {
+    document.getElementById('sliderValue').textContent = formatTime(time);
+
+    planeMarkers.forEach(marker => map.removeLayer(marker));
+    planeMarkers = [];
+
+    planes.forEach(plane => {
+      const coord = plane.positions[time];
+      if (coord) {
+        const marker = L.marker(coord, { icon: airplaneIcon })
+          .addTo(map)
+          .bindPopup(`${plane.name}<br>Time: ${formatTime(time)}`);
+        planeMarkers.push(marker);
+      }
+    });
+  }
+
+  // Initial display
+  updatePlanes(0);
+
+  document.getElementById('timeSlider').addEventListener('input', function (e) {
+    const time = parseInt(e.target.value);
+    updatePlanes(time);
+  });
+</script>
+
+</body>
+</html>
