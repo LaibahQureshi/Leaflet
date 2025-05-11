@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Access a GIS Feature Property</h2>
+<p id="demo"></p>
+
+<script>
+const feature = {
+"type" : "Feature",
+
+"geometry":{
+
+"type" : "Point",
+
+"coordinates": [74.3436, 31.5497]
+
+
+},
+
+"properties" : {
+
+"name" : "lahore"
+}
+}
+
+// Access and display the name of the city
+document.getElementById("demo").innerHTML = feature.properties.name;
+</script>
+
+
+</body>
+</html>
