@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Modify a GIS Feature Property</h2>
+<p id="demo"></p>
+
+<script>
+const feature = {
+  type: "Feature",
+  geometry: {
+    type: "Point",
+    coordinates: [74.3436, 31.5497] // Lahore
+  },
+  properties: {
+    name: "Lahore"
+  }
+};
+
+// Modify the name property
+feature.properties.name = "Model Town";
+
+// Display the updated name
+document.getElementById("demo").innerHTML = feature.properties.name;
+</script>
+
+</body>
+</html>
