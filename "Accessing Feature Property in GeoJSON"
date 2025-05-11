@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Access a GIS Feature Property</h2>
+<p id="demo"></p>
+
+<script>
+const features = [
+  {
+    "type": "Feature",
+    "geometry": {
+      "type": "LineString",
+      "coordinates": [67, 84]
+    },
+    "properties": {
+      "name": "Canal",
+      "id": 12
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "type": "LineString",
+      "coordinates": [90, 84]
+    },
+    "properties": {
+      "name": "Road",
+      "id": 21
+    }
+  }
+];
+
+
+document.getElementById("demo").innerHTML = features[1].properties.name;
+</script>
+
+</body>
+</html>
