@@ -26,3 +26,38 @@ document.getElementById("demo").innerHTML = feature.properties.name;
 
 </body>
 </html>
+
+
+Example #2
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Access a GIS Feature Property</h2>
+<p id="demo"></p>
+
+<script>
+const feature = {
+"type" : "line",
+"geometry" : {
+"type" : "line",
+"coordinate" : [67,84]
+},
+"properties" :
+{
+"name" : "canal",
+"id" : 12
+}
+}
+
+
+
+
+feature.properties.name = "Road"
+
+document.getElementById("demo").innerHTML = feature.properties.name;
+</script>
+
+
+</body>
+</html>
