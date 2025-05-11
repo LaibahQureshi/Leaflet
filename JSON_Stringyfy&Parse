@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Access a GIS Feature Property</h2>
+<p id="demo"></p>
+
+<script>
+const feature = {
+"type" : "line",
+"geometry" : {
+"type" : "line",
+"coordinate" : [67,84]
+},
+"properties" :
+{
+"name" : "canal",
+"id" : 12
+}
+}
+const s = JSON.stringify(feature)
+parse = JSON.parse(s)
+
+document.getElementById("demo").innerHTML = s
+</script>
+
+
+</body>
+</html>
